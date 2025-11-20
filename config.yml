@@ -41,6 +41,7 @@ params:
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
   description: "Theme PaperMod - https://github.com/adityatelange/hugo-PaperMod"
   author: Thamjeed
+  search: true
   # author: ["Me", "You"] # multiple authors
 
   defaultTheme: dark
@@ -72,6 +73,12 @@ params:
         url: archives
       - name: Tags
         url: tags
-caches:
-  images:
-    dir: :cacheDir/images
+  caches:
+    images:
+      dir: :cacheDir/images
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
