@@ -1,6 +1,6 @@
 baseURL: "https://th4mjeed.github.io/"
 title: th4mjeed
-copyright: "© [PaperMod Contributors](https://github.com/adityatelange/hugo-PaperMod/graphs/contributors)"
+copyright: "© Thamjeed"
 theme: [PaperMod]
 
 enableInlineShortcodes: true

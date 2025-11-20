@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on th4mjeed</title>
-    <link>http://localhost:1313/hugo-PaperMod/posts/</link>
+    <link>http://localhost:1313/posts/</link>
     <description>Recent content in Posts on th4mjeed</description>
     <generator>Hugo -- 0.147.8</generator>
     <language>en</language>
-    <copyright>PaperMod Contributors</copyright>
+    <copyright>Thamjeed</copyright>
     <lastBuildDate>Thu, 06 Nov 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/hugo-PaperMod/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SLURM as a Compilation Farm</title>
-      <link>http://localhost:1313/hugo-PaperMod/posts/slurm-as-a-compilation-farm-clean/</link>
+      <link>http://localhost:1313/posts/slurm-as-a-compilation-farm-clean/</link>
       <pubDate>Thu, 06 Nov 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/hugo-PaperMod/posts/slurm-as-a-compilation-farm-clean/</guid>
+      <guid>http://localhost:1313/posts/slurm-as-a-compilation-farm-clean/</guid>
       <description>&lt;hr&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; 📢 This document is based on my understanding of SLURM and is in no way a detailed guide covering every single topic. Take this as a practical guide from a noob’s perspective diving into it.&lt;/p&gt;&lt;/blockquote&gt;
@@ -22,9 +22,9 @@
     </item>
     <item>
       <title>SLURM as a Compilation Farm</title>
-      <link>http://localhost:1313/hugo-PaperMod/posts/slurm-as-a-compilation-farm/</link>
+      <link>http://localhost:1313/posts/slurm-as-a-compilation-farm/</link>
       <pubDate>Thu, 06 Nov 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/hugo-PaperMod/posts/slurm-as-a-compilation-farm/</guid>
+      <guid>http://localhost:1313/posts/slurm-as-a-compilation-farm/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;📢 NOTE: This document is based on my understanding of SLURM and is in no way a detailed guide covering every single topic, take this as a practical guide from a noob’s perspective diving into it.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;introduction&#34;&gt;&lt;strong&gt;Introduction:&lt;/strong&gt;&lt;/h2&gt;
@@ -32,9 +32,9 @@
     </item>
     <item>
       <title>Hello World</title>
-      <link>http://localhost:1313/hugo-PaperMod/posts/hello-world/</link>
+      <link>http://localhost:1313/posts/hello-world/</link>
       <pubDate>Fri, 31 Oct 2025 20:32:22 +0530</pubDate>
-      <guid>http://localhost:1313/hugo-PaperMod/posts/hello-world/</guid>
+      <guid>http://localhost:1313/posts/hello-world/</guid>
       <description></description>
     </item>
   </channel>
