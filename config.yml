@@ -65,10 +65,10 @@ params:
     enabled: true
     title: Thamjeed  
     subtitle: "Linux Kernel Enthusiast"
-    #imageUrl: "#"
-    #imageTitle: my image
-    # imageWidth: 120
-    # imageHeight: 120
+    imageUrl: "https://avatars.githubusercontent.com/u/78958596?v=4"
+    imageTitle: Profile Image
+    imageWidth: 120
+    imageHeight: 120
    # buttons:
    #   - name: Archives
    #     url: archives
