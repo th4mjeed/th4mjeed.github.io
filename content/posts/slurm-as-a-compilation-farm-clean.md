@@ -48,7 +48,7 @@ Every instance has Rocky Linux 9.5 installed with SSH, root login and defined IP
 
 The Architecture diagram looks like this:
 
-{{< figure src="/static/images/slurm-as-a-compilation-farm/SLUM_arch.drawio.png" alt="SLURM Architecture Diagram" >}}
+{{< figure src="/assets/images/slurm-as-a-compilation-farm/SLUM_arch.drawio.png" alt="SLURM Architecture Diagram" >}}
 
 ## **Chapter 1: The installation:**
 
