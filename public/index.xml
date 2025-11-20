@@ -20,22 +20,5 @@
 &lt;h2 id=&#34;introduction&#34;&gt;&lt;strong&gt;Introduction:&lt;/strong&gt;&lt;/h2&gt;
 &lt;p&gt;This guide is designed to help you effectively use the SLURM scheduler on Rocky Linux 9.5 server. The Server allows you to run computational jobs using both interactive and non-interactive modes. The goal here is to make a compilation farm, although this guide specifically focuses on compiling the Linux kernel, one should note that this may also be used to compile any other tool given that the prerequisites and dependencies are known.&lt;/p&gt;</description>
     </item>
-    <item>
-      <title>SLURM as a Compilation Farm</title>
-      <link>http://localhost:1313/posts/slurm-as-a-compilation-farm/</link>
-      <pubDate>Thu, 06 Nov 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/slurm-as-a-compilation-farm/</guid>
-      <description>&lt;blockquote&gt;
-&lt;p&gt;📢 NOTE: This document is based on my understanding of SLURM and is in no way a detailed guide covering every single topic, take this as a practical guide from a noob’s perspective diving into it.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;introduction&#34;&gt;&lt;strong&gt;Introduction:&lt;/strong&gt;&lt;/h2&gt;
-&lt;p&gt;This guide is designed to help you effectively use the SLURM scheduler on Rocky Linux 9.5 server. The Server allows you to run computational jobs using both interactive and non-interactive modes. The goal here is to make a compilation farm, although this guide specifically focuses on compiling the Linux kernel, one should note that this may also me used to compile any other tool given that the perquisites and dependencies are known.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Hello World</title>
-      <link>http://localhost:1313/posts/hello-world/</link>
-      <pubDate>Fri, 31 Oct 2025 20:32:22 +0530</pubDate>
-      <guid>http://localhost:1313/posts/hello-world/</guid>
-      <description></description>
-    </item>
   </channel>
 </rss>
