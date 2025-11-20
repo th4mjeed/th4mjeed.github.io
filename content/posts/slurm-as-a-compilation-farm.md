@@ -1,7 +1,7 @@
 ---
 
 title: "SLURM as a Compilation Farm"
-date: 2025-11-06
+date: 2025-11-19
 draft: false
 ------------
 
