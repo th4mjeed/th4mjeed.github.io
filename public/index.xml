@@ -11,9 +11,9 @@
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SLURM as a Compilation Farm</title>
-      <link>http://localhost:1313/posts/slurm-as-a-compilation-farm-clean/</link>
+      <link>http://localhost:1313/posts/slurm-as-a-compilation-farm/</link>
       <pubDate>Thu, 06 Nov 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/slurm-as-a-compilation-farm-clean/</guid>
+      <guid>http://localhost:1313/posts/slurm-as-a-compilation-farm/</guid>
       <description>&lt;hr&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; 📢 This document is based on my understanding of SLURM and is in no way a detailed guide covering every single topic. Take this as a practical guide from a noob’s perspective diving into it.&lt;/p&gt;&lt;/blockquote&gt;
