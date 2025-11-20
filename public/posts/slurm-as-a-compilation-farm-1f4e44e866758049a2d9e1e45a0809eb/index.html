@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="dark">
+
+<head><script src="/portfolio-hugo/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=portfolio-hugo/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Thamjeed</title>
+<meta name="keywords" content="">
+<meta name="description" content="SLURM as a Compilation Farm
+
+NOTE: This document is based on my understanding of SLURM and is in no way a detailed guide covering every single topic, take this as a practical guide from a noob’s perspective diving into it.
+
+Introduction:
+This guide is designed to help you effectively use the SLURM scheduler on Rocky Linux 9.5 server. The Server allows you to run computational jobs using both interactive and non-interactive modes. The goal here is to make a compilation farm, although this guide specifically focuses on compiling the Linux kernel, one should note that this may also me used to compile any other tool given that the perquisites and dependencies are known.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/portfolio-hugo/posts/slurm-as-a-compilation-farm-1f4e44e866758049a2d9e1e45a0809eb/">
+<link crossorigin="anonymous" href="/portfolio-hugo/assets/css/stylesheet.a5781257de4197b8e3d54346acdf1dd55a9ba4cb91dcace192fc1baf228c08b5.css" integrity="sha256-pXgSV95Bl7jj1UNGrN8d1VqbpMuR3KzhkvwbryKMCLU=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/portfolio-hugo/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/portfolio-hugo/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/portfolio-hugo/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/portfolio-hugo/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/portfolio-hugo/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/portfolio-hugo/posts/slurm-as-a-compilation-farm-1f4e44e866758049a2d9e1e45a0809eb/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/portfolio-hugo/" accesskey="h" title="Thamjeed (Alt + H)">Thamjeed</a>
+            <div class="logo-switches">
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/portfolio-hugo/posts/" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/portfolio-hugo/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/portfolio-hugo/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/portfolio-hugo/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="slurm-as-a-compilation-farm">SLURM as a Compilation Farm<a hidden class="anchor" aria-hidden="true" href="#slurm-as-a-compilation-farm">#</a></h1>
+<!-- raw HTML omitted -->
+<p>NOTE: This document is based on my understanding of SLURM and is in no way a detailed guide covering every single topic, take this as a practical guide from a noob’s perspective diving into it.</p>
+<!-- raw HTML omitted -->
+<h2 id="introduction"><strong>Introduction:</strong><a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
+<p>This guide is designed to help you effectively use the SLURM scheduler on Rocky Linux 9.5 server. The Server allows you to run computational jobs using both interactive and non-interactive modes. The goal here is to make a compilation farm, although this guide specifically focuses on compiling the Linux kernel, one should note that this may also me used to compile any other tool given that the perquisites and dependencies are known.</p>
+<p><strong>[STILL IN PROGRESS, WILL BE REMOVED IF NOT PRACTICAL]</strong> Additionally, We’d also setup distributed compilation using <strong>distcc</strong></p>
+<h2 id="lab-infrastructure"><strong>Lab Infrastructure:</strong><a hidden class="anchor" aria-hidden="true" href="#lab-infrastructure">#</a></h2>
+<p>The following are all on VMware ESXI</p>
+<ol>
+<li><strong>Master:</strong></li>
+</ol>
+<ul>
+<li>CPUs 4</li>
+<li>Memory 4 GB</li>
+<li>Hard disk 20 GB</li>
+<li>Hostname: master</li>
+</ul>
+<ol>
+<li><strong>Node 1:</strong></li>
+</ol>
+<ul>
+<li>CPUs  4</li>
+<li>Memory 4 GB</li>
+<li>Hard disk 40 GB</li>
+<li>Hostname: node1</li>
+</ul>
+<ol>
+<li><strong>Node 2:</strong></li>
+</ol>
+<ul>
+<li>CPUs 8</li>
+<li>Memory 8 GB</li>
+<li>Hard disk 40 GB</li>
+<li>Hostname: node2</li>
+</ul>
+<ol>
+<li><strong>Network File Storage</strong></li>
+</ol>
+<ul>
+<li>Since compiling creates dozens of file, at least 30 Gigs is required for a successful compilation.</li>
+<li>Used the existing testing server assigned to me.</li>
+<li>NFS share path located in <strong>/mnt/slrum_share</strong></li>
+</ul>
+<p>Every instance has Rocky Linux 9.5 installed with ssh, root login and defined ip of all 4 nodes in the /etc/hosts file</p>
+<p>The Architecture diagram for the looks like this:</p>
+<p><img alt="SLUM_arch.drawio.png" loading="lazy" src="SLURM%20as%20a%20Compilation%20Farm/SLUM_arch.drawio.png"></p>
+<h2 id="chapter-1-the-installation"><strong>Chapter 1: The installation:</strong><a hidden class="anchor" aria-hidden="true" href="#chapter-1-the-installation">#</a></h2>
+<ol>
+<li><strong>Install and configure dependencies</strong></li>
+</ol>
+<p>Installation of slurm requires EPEL repo to be installed across all instances, install and enable it via</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dnf config-manager --set-enabled crb
+</span></span><span style="display:flex;"><span>dnf install epel-release
+</span></span><span style="display:flex;"><span>sudo dnf groupinstall <span style="color:#e6db74">&#34;Development Tools&#34;</span>
+</span></span><span style="display:flex;"><span>sudo dnf install munge munge-devel rpm-build rpmdevtools python3 gcc make openssl-devel pam-devel
+</span></span></code></pre></div><p>MUNGE is an authentication mechanism for secure communication between Slurm components. configure it on all instances using:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo useradd munge
+</span></span><span style="display:flex;"><span>sudo mkdir -p /etc/munge /var/log/munge /var/run/munge
+</span></span><span style="display:flex;"><span>sudo chown munge:munge /usr/local/var/run/munge
+</span></span><span style="display:flex;"><span>sudo chmod <span style="color:#ae81ff">0755</span> /usr/local/var/run/munge <span style="color:#75715e"># Owner can rwx, group/others can rx (common for run dirs)</span>
+</span></span></code></pre></div><p>On Master:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo /usr/sbin/create-munge-key
+</span></span><span style="display:flex;"><span>sudo chown munge:munge /etc/munge/munge.key
+</span></span><span style="display:flex;"><span>sudo chmod <span style="color:#ae81ff">0400</span> /etc/munge/munge.key
+</span></span></code></pre></div><p>This creates a munge key with the necessary permissions, we need to copy the key to both our nodes by using scp.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>scp /etc/munge/munge.key root@node1:/etc/munge/
+</span></span><span style="display:flex;"><span>scp /etc/munge/munge.key root@node2:/etc/munge/
+</span></span></code></pre></div><p>Start and Enable the service using:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo systemctl enable --now munge
+</span></span></code></pre></div><ol>
+<li><strong>Installation of SLURM</strong></li>
+</ol>
+<p>Slurm is avaliable in the EPEL repo install on all 3 instances using:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dnf install slurm slurm-slurmd slurm-slurmctld slurm-perlapi
+</span></span></code></pre></div><p>If by any chance packages are not avaliable (Highly unlikely) you can always download tar file from <a href="https://www.schedmd.com/download-slurm/">Download Slurm - SchedMD</a> extract it and use the below command to compile and install it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>make -j<span style="color:#66d9ef">$(</span>nproc<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>sudo make install
+</span></span></code></pre></div><h2 id="chapter-2-the-configuration"><strong>Chapter 2: The Configuration:</strong><a hidden class="anchor" aria-hidden="true" href="#chapter-2-the-configuration">#</a></h2>
+<ol>
+<li><strong>Slurm configuration</strong></li>
+</ol>
+<p>On all 3 instances use the following command</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo useradd slurm
+</span></span><span style="display:flex;"><span>sudo mkdir -p /etc/slurm /var/spool/slurmctld /var/spool/slurmd /var/log/slurm
+</span></span><span style="display:flex;"><span>sudo chown slurm:slurm /var/spool/slurmctld /var/spool/slurmd /var/log/slurm
+</span></span></code></pre></div><p>This creates the user, log files and changes the ownership of the files to be slurm</p>
+<p>Now open the slurm config file on the master using:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo nano /etc/slurm/slurm.conf
+</span></span></code></pre></div><p>The main lines to be focused on are:</p>
+<p><code>ClusterName=debug</code></p>
+<p><code>SlurmUser=slurm</code></p>
+<p><code>ControlMachine=slurm-master</code></p>
+<p><code>SlurmctldPort=6817</code></p>
+<p><code>SlurmdPort=6818</code></p>
+<p><code>AuthType=auth/munge</code></p>
+<p><code>StateSaveLocation=/var/spool/slurmctld</code></p>
+<p><code>SlurmdSpoolDir=/var/spool/slurmd</code></p>
+<p><code>SwitchType=switch/none</code></p>
+<p><code>MpiDefault=none</code></p>
+<p><code>SlurmctldPidFile=/var/run/slurmctld.pid</code></p>
+<p><code>SlurmdPidFile=/var/run/slurmd.pid</code></p>
+<p><code>ProctrackType=proctrack/pgid</code></p>
+<p><code>ReturnToService=1SchedulerType=sched/backfill</code></p>
+<p><code>SlurmctldTimeout=300</code></p>
+<p><code>SlurmdTimeout=30</code></p>
+<p><code>NodeName=node1 CPUs=4 RealMemory=3657 State=UNKNOWN</code></p>
+<p><code>NodeName=node2 CPUs=8 RealMemory=7682 State=UNKNOWN</code></p>
+<p><code>PartitionName=debug Nodes=node[1-2] Default=YES MaxTime=INFINITE State=UP</code></p>
+<p>Make sure to the values are the same as above without any spelling mistakes, also if any value is not available create them.</p>
+<p>Copy the same config onto <strong>node1</strong> and <strong>node2 using</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>scp /etc/slurm/slurm.conf root@node1:/etc/slurm/slurm.conf
+</span></span><span style="display:flex;"><span>scp /etc/slurm/slurm.conf root@node2:/etc/slurm/slurm.conf
+</span></span></code></pre></div><p>Start and enable the services on boot</p>
+<p>On master:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo systemctl enable --now slurmctld
+</span></span></code></pre></div><p>On compute nodes:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo systemctl enable --now slurmd
+</span></span></code></pre></div><p>Slurm should be working and synced up to the nodes</p>
+<ol>
+<li><strong>Firewall Configuration:</strong></li>
+</ol>
+<p>Firewall prevents ports required by slurm to be accessed, while in my testing case I had disable the firewall service, I would not recommend doing this in production, hence the correct way to open ports in slurm, on all 3 instances:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo firewall-cmd --permanent --add-port<span style="color:#f92672">=</span>6817/tcp
+</span></span><span style="display:flex;"><span>sudo firewall-cmd --permanent --add-port<span style="color:#f92672">=</span>6818/tcp
+</span></span><span style="display:flex;"><span>sudo firewall-cmd --permanent --add-port<span style="color:#f92672">=</span>6819/tcp
+</span></span><span style="display:flex;"><span>sudo firewall-cmd --reload
+</span></span></code></pre></div><h2 id="chapter-3-testing-and-introduction-to-the-commands"><strong>Chapter 3: Testing and Introduction to the commands:</strong><a hidden class="anchor" aria-hidden="true" href="#chapter-3-testing-and-introduction-to-the-commands">#</a></h2>
+<p><strong>[While this is a short guide on the commands and its flags, you could always use man pages to understand it more deeply]</strong></p>
+<ol>
+<li><code>sinfo</code>:</li>
+</ol>
+<p>This command is displays the information about the nodes, what the partition name is, on what state they’re in and how many nodes are included in the partition</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@master ~<span style="color:#f92672">]</span><span style="color:#75715e"># sinfo</span>
+</span></span><span style="display:flex;"><span>PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
+</span></span><span style="display:flex;"><span>debug*       up   infinite      <span style="color:#ae81ff">2</span>   idle node<span style="color:#f92672">[</span>1-2<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>Idle here means that the nodes are waiting for a job to be assigned.</p>
+<ol>
+<li><code>srun</code>:</li>
+</ol>
+<p>srun is used to run command on the compute nodes via master in an interactive manner. For example if I needed to know the cores available in node 1 and 2</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@master ~<span style="color:#f92672">]</span><span style="color:#75715e"># srun -N2 -n2 nproc</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">8</span>
+</span></span></code></pre></div><p>Where the <code>-N</code>  is the number of nodes for the job (here nproc) to be allocated, and <code>-n</code> is the number of tasks to be given to the node.</p>
+<ol>
+<li><code>sbatch</code> :</li>
+</ol>
+<p>Used to submit a job script which is provided as an argument to the file. For example</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@master ~<span style="color:#f92672">]</span><span style="color:#75715e"># sbatch [testjob.sh](http://testjob.sh/)</span>
+</span></span><span style="display:flex;"><span>Submitted batch job <span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>We’ll be learning more about the syntax of these files later</p>
+<ol>
+<li><code>squeue</code>:</li>
+</ol>
+<p>Used to display details of currently running jobs, such as on what node is it running, user and how long has it has been running.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@master ~<span style="color:#f92672">]</span><span style="color:#75715e"># squeue</span>
+</span></span><span style="display:flex;"><span>JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST<span style="color:#f92672">(</span>REASON<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">1</span>      debug   test_job    root  R       0:02      <span style="color:#ae81ff">1</span> node1
+</span></span></code></pre></div><p>Here we can see the job we previously executed job via <code>sbatch</code></p>
+<ol>
+<li><code>scancel</code>:</li>
+</ol>
+<p>Used to cancel a submitted job, this command does not explicitly return an output.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@master ~<span style="color:#f92672">]</span><span style="color:#75715e"># scancel 1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@master ~<span style="color:#f92672">]</span><span style="color:#75715e"># squeue</span>
+</span></span><span style="display:flex;"><span>JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST<span style="color:#f92672">(</span>REASON<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@master ~<span style="color:#f92672">]</span><span style="color:#75715e">#</span>
+</span></span></code></pre></div><ol>
+<li><code>scontrol</code> :</li>
+</ol>
+<p>Provides a detailed information about the nodes the usage of this command is a little vast some common example are:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@master ~<span style="color:#f92672">]</span><span style="color:#75715e"># scontrol show job 1</span>
+</span></span><span style="display:flex;"><span>JobId<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> JobName<span style="color:#f92672">=</span>test_job
+</span></span><span style="display:flex;"><span>UserId<span style="color:#f92672">=</span>root<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span> GroupId<span style="color:#f92672">=</span>root<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span> MCS_label<span style="color:#f92672">=</span>N/A
+</span></span><span style="display:flex;"><span>Priority<span style="color:#f92672">=</span><span style="color:#ae81ff">4294901750</span> Nice<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> Account<span style="color:#f92672">=(</span>null<span style="color:#f92672">)</span> QOS<span style="color:#f92672">=</span>normal
+</span></span><span style="display:flex;"><span>JobState<span style="color:#f92672">=</span>RUNNING Reason<span style="color:#f92672">=</span>None Dependency<span style="color:#f92672">=(</span>null<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Requeue<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> Restarts<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> BatchFlag<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> Reboot<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> ExitCode<span style="color:#f92672">=</span>0:0
+</span></span><span style="display:flex;"><span>RunTime<span style="color:#f92672">=</span>00:00:04 TimeLimit<span style="color:#f92672">=</span>00:01:00 TimeMin<span style="color:#f92672">=</span>N/A
+</span></span><span style="display:flex;"><span>SubmitTime<span style="color:#f92672">=</span>2025-05-19T02:34:05 EligibleTime<span style="color:#f92672">=</span>2025-05-19T02:34:05
+</span></span><span style="display:flex;"><span>AccrueTime<span style="color:#f92672">=</span>2025-05-19T02:34:05
+</span></span><span style="display:flex;"><span>StartTime<span style="color:#f92672">=</span>2025-05-19T02:34:05 EndTime<span style="color:#f92672">=</span>2025-05-19T02:35:05 Deadline<span style="color:#f92672">=</span>N/A
+</span></span><span style="display:flex;"><span>SuspendTime<span style="color:#f92672">=</span>None SecsPreSuspend<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> LastSchedEval<span style="color:#f92672">=</span>2025-05-19T02:34:05 Scheduler<span style="color:#f92672">=</span>Backfill
+</span></span><span style="display:flex;"><span>Partition<span style="color:#f92672">=</span>debug AllocNode:Sid<span style="color:#f92672">=</span>master:20850
+</span></span><span style="display:flex;"><span>ReqNodeList<span style="color:#f92672">=(</span>null<span style="color:#f92672">)</span> ExcNodeList<span style="color:#f92672">=(</span>null<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>NodeList<span style="color:#f92672">=</span>node1
+</span></span><span style="display:flex;"><span>BatchHost<span style="color:#f92672">=</span>node1
+</span></span><span style="display:flex;"><span>NumNodes<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> NumCPUs<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> NumTasks<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> CPUs/Task<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ReqB:S:C:T<span style="color:#f92672">=</span>0:0:*:*
+</span></span><span style="display:flex;"><span>TRES<span style="color:#f92672">=</span>cpu<span style="color:#f92672">=</span>1,node<span style="color:#f92672">=</span>1,billing<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>Socks/Node<span style="color:#f92672">=</span>* NtasksPerN:B:S:C<span style="color:#f92672">=</span>0:0:*:* CoreSpec<span style="color:#f92672">=</span>*
+</span></span><span style="display:flex;"><span>MinCPUsNode<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> MinMemoryNode<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> MinTmpDiskNode<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>Features<span style="color:#f92672">=(</span>null<span style="color:#f92672">)</span> DelayBoot<span style="color:#f92672">=</span>00:00:00
+</span></span><span style="display:flex;"><span>OverSubscribe<span style="color:#f92672">=</span>OK Contiguous<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> Licenses<span style="color:#f92672">=(</span>null<span style="color:#f92672">)</span> Network<span style="color:#f92672">=(</span>null<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Command<span style="color:#f92672">=</span>/root/testjob.sh
+</span></span><span style="display:flex;"><span>WorkDir<span style="color:#f92672">=</span>/root
+</span></span><span style="display:flex;"><span>StdErr<span style="color:#f92672">=</span>/root/slurm_test_output.txt
+</span></span><span style="display:flex;"><span>StdIn<span style="color:#f92672">=</span>/dev/null
+</span></span><span style="display:flex;"><span>StdOut<span style="color:#f92672">=</span>/root/slurm_test_output.txt
+</span></span><span style="display:flex;"><span>Power<span style="color:#f92672">=</span>
+</span></span></code></pre></div><p>6.1 <code>scontrol show job 1</code>: Displays details of the running job</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@master ~<span style="color:#f92672">]</span><span style="color:#75715e"># scontrol show partition</span>
+</span></span><span style="display:flex;"><span>PartitionName<span style="color:#f92672">=</span>debug
+</span></span><span style="display:flex;"><span>AllowGroups<span style="color:#f92672">=</span>ALL AllowAccounts<span style="color:#f92672">=</span>ALL AllowQos<span style="color:#f92672">=</span>ALL
+</span></span><span style="display:flex;"><span>AllocNodes<span style="color:#f92672">=</span>ALL Default<span style="color:#f92672">=</span>YES QoS<span style="color:#f92672">=</span>N/A
+</span></span><span style="display:flex;"><span>DefaultTime<span style="color:#f92672">=</span>NONE DisableRootJobs<span style="color:#f92672">=</span>NO ExclusiveUser<span style="color:#f92672">=</span>NO GraceTime<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> Hidden<span style="color:#f92672">=</span>NO
+</span></span><span style="display:flex;"><span>MaxNodes<span style="color:#f92672">=</span>UNLIMITED MaxTime<span style="color:#f92672">=</span>UNLIMITED MinNodes<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> LLN<span style="color:#f92672">=</span>NO MaxCPUsPerNode<span style="color:#f92672">=</span>UNLIMITED
+</span></span><span style="display:flex;"><span>Nodes<span style="color:#f92672">=</span>node<span style="color:#f92672">[</span>1-2<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>PriorityJobFactor<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> PriorityTier<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> RootOnly<span style="color:#f92672">=</span>NO ReqResv<span style="color:#f92672">=</span>NO OverSubscribe<span style="color:#f92672">=</span>NO
+</span></span><span style="display:flex;"><span>OverTimeLimit<span style="color:#f92672">=</span>NONE PreemptMode<span style="color:#f92672">=</span>OFF
+</span></span><span style="display:flex;"><span>State<span style="color:#f92672">=</span>UP TotalCPUs<span style="color:#f92672">=</span><span style="color:#ae81ff">12</span> TotalNodes<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span> SelectTypeParameters<span style="color:#f92672">=</span>NONE
+</span></span><span style="display:flex;"><span>JobDefaults<span style="color:#f92672">=(</span>null<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>DefMemPerNode<span style="color:#f92672">=</span>UNLIMITED MaxMemPerNode<span style="color:#f92672">=</span>UNLIMITED
+</span></span><span style="display:flex;"><span>TRES<span style="color:#f92672">=</span>cpu<span style="color:#f92672">=</span>12,mem<span style="color:#f92672">=</span>11339M,node<span style="color:#f92672">=</span>2,billing<span style="color:#f92672">=</span><span style="color:#ae81ff">12</span>
+</span></span></code></pre></div><p>6.2 <code>scontrol show partition</code>: Displays information about the partitions (here referring to the node config).</p>
+<p>6.3 <code>scontrol cancel jobid=&lt;jobid&gt;</code>: Another way to cancel jobs</p>
+<p>6.4 <code>scontrol requeue &lt;jobid&gt;</code>: Requeues the an errored out job</p>
+<p>6.5 <code>scontrol update jobid=&lt;job_id&gt; priority=100000</code>: Increases the priority of a running job</p>
+<p>6.6 <code>scontrol update NodeName=node01 State=RESUME</code>: Resume a drained or a disabled node</p>
+<h2 id="chapter-4-setting-up-the-nfs-storage"><strong>Chapter 4: Setting up the NFS storage.</strong><a hidden class="anchor" aria-hidden="true" href="#chapter-4-setting-up-the-nfs-storage">#</a></h2>
+<p>It is a good idea to have a shared storage on slurm, since you may run into issues like not having enough space, or when you want both the nodes accessing a same file or folder. We’ll be using nfs-utils package to achieve this, install on NFS device and</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dnf install nfs-utils
+</span></span></code></pre></div><p><strong>On the Linux machine to be used as NFS (here testing-server)</strong></p>
+<p>Creating a directory in /srv/slrum_share using:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir /srv/slurm_share
+</span></span></code></pre></div><p>Open the file <strong>/etc/exports</strong> in nano and add the following line</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nano /etc/exports
+</span></span></code></pre></div><p><code>/srv/slurm_share 10.10.40.0/24(rw,sync,no_subtree_check,no_root_squash)</code></p>
+<p>Save and quit the file.</p>
+<p>Open Ports using:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>firewall-cmd --permanent --add-service<span style="color:#f92672">=</span>rpc-bind
+</span></span><span style="display:flex;"><span>firewall-cmd --permanent --add-port<span style="color:#f92672">={</span>5555/tcp,5555/udp,6666/tcp,6666/udp<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>firewall-cmd --reload
+</span></span></code></pre></div><p>Export the share and enable the server using the following command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>exportfs -v   
+</span></span><span style="display:flex;"><span>systemctl enable —now nfs-server 
+</span></span></code></pre></div><p><strong>On the master and compute nodes:</strong></p>
+<p>Create a directory in /mnt/slurm_share using:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo mkdir /mnt/slurm_share
+</span></span></code></pre></div><p>To the mount the share on boot open the following file in nano with /etc/nano and paste the line:</p>
+<p><code>/mnt/slurm_share 10.10.40.0/24(rw,sync,no_subtree_check,no_root_squash)</code></p>
+<p>Reboot the machines and you should have the shared folder mounted to <strong>/mnt/slurm_share</strong></p>
+<h2 id="chapter-5-setting-up-the-compilebuild-environment"><strong>Chapter 5: Setting up the Compile/Build Environment</strong><a hidden class="anchor" aria-hidden="true" href="#chapter-5-setting-up-the-compilebuild-environment">#</a></h2>
+<p>There are certain development dependencies that are required to build the kernel, these need to be installed on all the nodes including the master, use this command to parallelly install them:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -n2 -N2 sudo dnf groupinstall <span style="color:#e6db74">&#34;Development Tools&#34;</span> -y <span style="color:#f92672">&amp;&amp;</span>  sudo dnf install ncurses-devel bison flex elfutils-libelf-devel openssl-devel wget bc dwarves -y
+</span></span></code></pre></div><p>This will install them in on the nodes and the same command without <strong>srun -n2 -N2</strong> to install on master.</p>
+<p>Download the Linux kernel source from <a href="http://kernel.org">kernel.org</a> as for writing this the latest stable kernel version is 6.14.8. Download this tar and extract on the shared folder using.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>wget <span style="color:#f92672">[</span>https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.14.8.tar.xz<span style="color:#f92672">](</span>https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.14.8.tar.xz<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>tar xvf linux-6.14.8.tar.xz
+</span></span></code></pre></div><p>Use the below command to define an architecture specific <strong>.config</strong> file</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>make defconfig
+</span></span></code></pre></div><p><strong>On master:</strong></p>
+<p>create a file named compile_kernel.sh on the share mounted directory and paste the code in it:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># SLURM Batch Script for Kernel Compilation</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#SBATCH --job-name=kernel_build       # Name of your job</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#SBATCH --output=kernel_build_%j.out  # Standard output file (%j expands to jobID)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#SBATCH --error=kernel_build_%j.err   # Standard error file</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#SBATCH --time=03:00:00               # Max runtime (3 hours, adjust as needed)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#SBATCH --nodes=1                     # Request 1 compute node</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --- RESOURCE REQUESTS (CHOOSE ONE SET) ---</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Option A: For node1 (4 cores, 4GB RAM)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># #SBATCH --cpus-per-task=4           # Request 4 CPU cores for make -j4</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># #SBATCH --mem=4G                    # Request 4GB RAM</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Option B: For node2 (8 cores, 8GB RAM) - RECOMMENDED FOR FASTER BUILDS</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#SBATCH --cpus-per-task=8             # Request 8 CPU cores for make -j8</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#SBATCH --mem=8G                      # Request 8GB RAM</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --- END RESOURCE REQUESTS ---</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Set environment variables for the kernel build</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Replace &#39;linux-6.x.y&#39; with your actual kernel source directory name</span>
+</span></span><span style="display:flex;"><span>KERNEL_SOURCE_PATH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/mnt/slurm_share/linux-6.8.9&#34;</span>
+</span></span><span style="display:flex;"><span>BUILD_OUTPUT_DIR<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/mnt/slurm_share/kernel_builds/</span><span style="color:#e6db74">${</span>SLURM_JOB_ID<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;-----------------------------------------------------&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;SLURM Job ID: </span><span style="color:#e6db74">${</span>SLURM_JOB_ID<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Job Name: </span><span style="color:#e6db74">${</span>SLURM_JOB_NAME<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Running on host: </span><span style="color:#66d9ef">$(</span>hostname<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Assigned CPUS: </span><span style="color:#e6db74">${</span>SLURM_CPUS_PER_TASK<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Assigned Memory: </span><span style="color:#e6db74">${</span>SLURM_MEM_PER_NODE<span style="color:#e6db74">}</span><span style="color:#e6db74">MB&#34;</span> <span style="color:#75715e"># Note: SLURM_MEM_PER_NODE is in MB if --mem was in GB</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Kernel Source Path: </span><span style="color:#e6db74">${</span>KERNEL_SOURCE_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Build Output Dir: </span><span style="color:#e6db74">${</span>BUILD_OUTPUT_DIR<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Current working directory: </span><span style="color:#66d9ef">$(</span>pwd<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;-----------------------------------------------------&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Create a unique directory for the build output (artifacts)</span>
+</span></span><span style="display:flex;"><span>mkdir -p <span style="color:#e6db74">&#34;</span>$BUILD_OUTPUT_DIR<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> $? -ne <span style="color:#ae81ff">0</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;ERROR: Could not create output directory </span>$BUILD_OUTPUT_DIR<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Change to the kernel source directory</span>
+</span></span><span style="display:flex;"><span>cd <span style="color:#e6db74">&#34;</span>$KERNEL_SOURCE_PATH<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> $? -ne <span style="color:#ae81ff">0</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;ERROR: Could not change to kernel source directory </span>$KERNEL_SOURCE_PATH<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Load any necessary modules (e.g., specific GCC versions, cross-compilers)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># module load gcc/12.2.0</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># module load some-toolchain</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Set the number of parallel jobs for &#39;make&#39;.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># This uses the number of CPUs SLURM allocated to your job.</span>
+</span></span><span style="display:flex;"><span>NUM_MAKE_JOBS<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>SLURM_CPUS_PER_TASK<span style="color:#e6db74">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Starting kernel compilation using &#39;make -j</span><span style="color:#e6db74">${</span>NUM_MAKE_JOBS<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;...&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Compiling on node: </span><span style="color:#66d9ef">$(</span>hostname<span style="color:#66d9ef">)</span><span style="color:#e6db74"> with </span><span style="color:#66d9ef">$(</span>nproc<span style="color:#66d9ef">)</span><span style="color:#e6db74"> physical cores and </span><span style="color:#66d9ef">$(</span>lscpu | grep <span style="color:#e6db74">&#39;Thread(s) per core&#39;</span> | awk <span style="color:#e6db74">&#39;{print $NF}&#39;</span><span style="color:#66d9ef">)</span><span style="color:#e6db74"> threads per core.&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Execute the kernel compilation</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Assuming you want to build the &#39;Image&#39; (compressed kernel), &#39;modules&#39;, and &#39;device tree blobs&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Adjust ARCH and CROSS_COMPILE if you are cross-compiling for a different architecture</span>
+</span></span><span style="display:flex;"><span>make -j<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>NUM_MAKE_JOBS<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    ARCH<span style="color:#f92672">=</span>x86_64 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#75715e"># CROSS_COMPILE=arm-linux-gnueabihf- \ # Uncomment and adjust for cross-compilation</span>
+</span></span><span style="display:flex;"><span>    Image modules dtbs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check the exit status of the make command</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> $? -eq <span style="color:#ae81ff">0</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;Kernel compilation successful!&#34;</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;Copying build artifacts to </span>$BUILD_OUTPUT_DIR<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Copy relevant build artifacts to your output directory</span>
+</span></span><span style="display:flex;"><span>    cp <span style="color:#e6db74">&#34;</span>$KERNEL_SOURCE_PATH<span style="color:#e6db74">/arch/x86/boot/bzImage&#34;</span> <span style="color:#e6db74">&#34;</span>$BUILD_OUTPUT_DIR<span style="color:#e6db74">/&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># For modules, you might want to install them into a temporary location</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># make modules_install INSTALL_MOD_PATH=&#34;${BUILD_OUTPUT_DIR}/modules_install&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># cp -r &#34;$KERNEL_SOURCE_PATH/System.map&#34; &#34;$BUILD_OUTPUT_DIR/&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># cp -r &#34;$KERNEL_SOURCE_PATH/.config&#34; &#34;$BUILD_OUTPUT_DIR/&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;Kernel compilation FAILED. Check the output in </span><span style="color:#e6db74">${</span>SLURM_JOB_NAME<span style="color:#e6db74">}</span><span style="color:#e6db74">_</span><span style="color:#e6db74">${</span>SLURM_JOB_ID<span style="color:#e6db74">}</span><span style="color:#e6db74">.err&#34;</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;Also check the detailed logs in </span>$BUILD_OUTPUT_DIR<span style="color:#e6db74">/.&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Job finished at </span><span style="color:#66d9ef">$(</span>date<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;-----------------------------------------------------&#34;</span>
+</span></span></code></pre></div>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="http://localhost:1313/portfolio-hugo/">Thamjeed</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+</body>
+
+</html>

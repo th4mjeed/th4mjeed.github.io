@@ -1,0 +1,89 @@
+/* ====== CORE DARK THEME (MATCHED FROM SCREENSHOT) ====== */
+:root,
+:root[data-theme="dark"],
+.dark {
+  --theme: #0D0E0F;          /* page background */
+  --entry: #111214;          /* content container background */
+  --primary: #E5E7EB;        /* main text */
+  --secondary: #9CA3AF;      /* secondary text */
+  --tertiary: #6B7280;       /* muted text */
+  --border: #1F2123;         /* subtle dividers */
+  --link: #60A5FA;           /* link color (blue) */
+  --link-hover: #93C5FD;     /* link hover */
+}
+
+/* ====== BASE TEXT ====== */
+body {
+  background: var(--theme) !important;
+  color: var(--primary) !important;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--primary) !important;
+  font-weight: 700;
+}
+
+/* Metadata / dates */
+.post-meta,
+.meta-item {
+  color: var(--tertiary) !important;
+}
+
+/* ====== LINKS ====== */
+a {
+  color: var(--link) !important;
+  text-decoration: none;
+}
+a:hover {
+  color: var(--link-hover) !important;
+  text-decoration: underline;
+}
+
+/* ====== CARDS & BLOCKS ====== */
+.entry,
+.post-content,
+.post,
+.card {
+  background: var(--entry) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* ====== TABLE OF CONTENTS ====== */
+.toc,
+.toc .inner {
+  background: #111214 !important;
+  border: 1px solid var(--border) !important;
+  color: var(--primary) !important;
+}
+
+/* ====== CODE BLOCKS ====== */
+pre,
+code,
+.chroma {
+  background: #0C0D0F !important;
+  color: var(--primary) !important;
+  border: 1px solid #1A1B1D !important;
+}
+
+/* ====== NAVBAR ====== */
+.header,
+.navbar {
+  background: #0D0E0F !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.header a,
+.navbar a {
+  color: var(--primary) !important;
+}
+
+/* ====== BUTTONS (Table of Contents toggle) ====== */
+button,
+.btn {
+  background: #111214 !important;
+  color: var(--primary) !important;
+  border: 1px solid var(--border) !important;
+}
+button:hover {
+  background: #1A1B1D !important;
+}

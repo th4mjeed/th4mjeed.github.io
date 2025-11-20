@@ -1,0 +1,11 @@
+:root {
+  --theme: #23262d;
+  --entry: #2e323b;
+  --primary: #41b883;        /* Accent green */
+  --secondary: #8a8f98;      /* Muted gray text */
+  --tertiary: #c5c5c5;       /* Light gray text */
+  --content: #d6d6d6;        /* Main text */
+  --hljs-bg: #1e1f24;        /* Code block background */
+  --code-bg: #1e1f24;
+  --border: #3a3f46;
+}

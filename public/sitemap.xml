@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>http://localhost:1313/hugo-PaperMod/posts/</loc>
+    <lastmod>2025-11-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/hugo-PaperMod/posts/slurm-as-a-compilation-farm-clean/</loc>
+    <lastmod>2025-11-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/hugo-PaperMod/posts/slurm-as-a-compilation-farm/</loc>
+    <lastmod>2025-11-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/hugo-PaperMod/</loc>
+    <lastmod>2025-11-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/hugo-PaperMod/posts/hello-world/</loc>
+    <lastmod>2025-10-31T20:32:22+05:30</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/hugo-PaperMod/categories/</loc>
+  </url><url>
+    <loc>http://localhost:1313/hugo-PaperMod/search/</loc>
+  </url><url>
+    <loc>http://localhost:1313/hugo-PaperMod/series/</loc>
+  </url><url>
+    <loc>http://localhost:1313/hugo-PaperMod/tags/</loc>
+  </url>
+</urlset>
