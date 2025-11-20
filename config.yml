@@ -72,3 +72,6 @@ params:
         url: archives
       - name: Tags
         url: tags
+caches:
+  images:
+    dir: :cacheDir/images
