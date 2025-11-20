@@ -62,17 +62,30 @@ params:
       - css/extended/custom.css
 
   profileMode:
-    enabled: false
-    title: PaperMod
-    imageUrl: "#"
-    imageTitle: my image
+    enabled: true
+    title: Thamjeed  
+    subtitle: "Linux Kernel Enthusiast"
+    #imageUrl: "#"
+    #imageTitle: my image
     # imageWidth: 120
     # imageHeight: 120
-    buttons:
-      - name: Archives
-        url: archives
-      - name: Tags
-        url: tags
+   # buttons:
+   #   - name: Archives
+   #     url: archives
+   #   - name: Tags
+   #     url: tags
+
+  socialIcons:
+    - name: github
+      title: View Profile on Github
+      url: "https://github.com/th4mjeed"
+    - name: linkedin
+      title: View Linkedin Profile
+      url: "https://www.linkedin.com/in/th4mjeed/"
+    - name: email
+      title: Send an E-mail
+      url: "mailto:7h4mj33d@gmail.com"
+
   caches:
     images:
       dir: :cacheDir/images
