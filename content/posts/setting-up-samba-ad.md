@@ -1,7 +1,7 @@
 ---
 
 title: "Setting Up Samba as an Active Directory Domain Controller on Linux"
-date: 2025-11-19
+date: 2025-11-21
 draft: false
 ------------
 
