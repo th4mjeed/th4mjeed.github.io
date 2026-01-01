@@ -7,8 +7,21 @@
     <generator>Hugo -- 0.147.8</generator>
     <language>en</language>
     <copyright>Thamjeed</copyright>
-    <lastBuildDate>Wed, 19 Nov 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 21 Nov 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Setting Up Samba as an Active Directory Domain Controller on Linux</title>
+      <link>http://localhost:1313/posts/setting-up-samba-ad/</link>
+      <pubDate>Fri, 21 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/setting-up-samba-ad/</guid>
+      <description>&lt;hr&gt;
+&lt;p&gt;In this guide, we walk through the process of setting up a Samba Active Directory Domain Controller. The goal is to create a fully functional AD environment with the ability to join Windows and Linux clients to the domain.&lt;/p&gt;
+&lt;p&gt;This setup mirrors how Microsoft Active Directory works, but fully powered by open‑source software.&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ll be using Fedora Linux to configure Samba AD, but you can use any Linux&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;preparing-the-domain-controller-system&#34;&gt;Preparing the Domain Controller System&lt;/h2&gt;
+&lt;p&gt;We begin by configuring Fedora 43 to act as a domain controller. The hostname must reflect the fully qualified domain name of the AD server.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>SLURM as a Compilation Farm</title>
       <link>http://localhost:1313/posts/slurm-as-a-compilation-farm/</link>

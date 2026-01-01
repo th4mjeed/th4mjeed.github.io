@@ -36,12 +36,17 @@ languages:
         - name: Search
           url: search/
           weight: 10
+        - name: Archive
+          url: /archives/
+          weight: 30
+
  
 params:
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
   description: "Theme PaperMod - https://github.com/adityatelange/hugo-PaperMod"
   author: Thamjeed
   search: true
+  ShowArchive: true
   # author: ["Me", "You"] # multiple authors
 
   defaultTheme: dark
