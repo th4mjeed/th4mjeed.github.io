@@ -14,8 +14,7 @@ mainsections: ["posts", "papermod"]
 
 minify:
   disableXML: true
-  # minifyOutput: true
-
+  minifyOutput: true
 pagination:
   disableAliases: false
   pagerSize: 5
@@ -47,7 +46,6 @@ params:
   author: Thamjeed
   search: true
   ShowArchive: true
-  # author: ["Me", "You"] # multiple authors
 
   defaultTheme: dark
   disableThemeToggle: true
@@ -62,6 +60,7 @@ params:
   ShowAllPagesInArchive: true
   ShowPageNums: true
   ShowToc: true
+  TocOpen: true
   assets:
     customCSS:
       - css/extended/custom.css
@@ -69,7 +68,7 @@ params:
   profileMode:
     enabled: true
     title: Thamjeed  
-    subtitle: "Linux Kernel Enthusiast"
+    subtitle: "Linux system administrator exploring Linux internals and kernel fundamentals."
     imageUrl: "https://avatars.githubusercontent.com/u/78958596?v=4"
     imageTitle: Profile Image
     imageWidth: 120
