@@ -4,11 +4,21 @@
     <title>th4mjeed</title>
     <link>http://localhost:1313/</link>
     <description>Recent content on th4mjeed</description>
-    <generator>Hugo -- 0.147.8</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>en</language>
     <copyright>Thamjeed</copyright>
-    <lastBuildDate>Fri, 21 Nov 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 14 Jan 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Setting up the Community Edition of IBM LSF (Load Sharing Facility)</title>
+      <link>http://localhost:1313/posts/setting-up-community-edition-lsf/</link>
+      <pubDate>Wed, 14 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/setting-up-community-edition-lsf/</guid>
+      <description>&lt;hr&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;I wanted to understand how LSF actually works, not just at a surface “submit job, job runs” level, but the &lt;em&gt;real&lt;/em&gt; mechanics. Most places that use LSF don’t document it well, and when they do, it’s written assuming you already run a production cluster.&lt;/p&gt;
+&lt;p&gt;So I decided to build a small LSF Community Edition cluster at home and treat it like an EDA-style environment: master node, execution nodes, login-style submission, interactive jobs, X11, the whole thing.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Setting Up Samba as an Active Directory Domain Controller on Linux</title>
       <link>http://localhost:1313/posts/setting-up-samba-ad/</link>
@@ -29,7 +39,8 @@
       <guid>http://localhost:1313/posts/slurm-as-a-compilation-farm/</guid>
       <description>&lt;hr&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; 📢 This document is based on my understanding of SLURM and is in no way a detailed guide covering every single topic. Take this as a practical guide from a noob’s perspective diving into it.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; 📢 This document is based on my understanding of SLURM and is in no way a detailed guide covering every single topic. Take this as a practical guide from a noob’s perspective diving into it.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;h2 id=&#34;introduction&#34;&gt;&lt;strong&gt;Introduction:&lt;/strong&gt;&lt;/h2&gt;
 &lt;p&gt;This guide is designed to help you effectively use the SLURM scheduler on Rocky Linux 9.5 server. The Server allows you to run computational jobs using both interactive and non-interactive modes. The goal here is to make a compilation farm, although this guide specifically focuses on compiling the Linux kernel, one should note that this may also be used to compile any other tool given that the prerequisites and dependencies are known.&lt;/p&gt;</description>
     </item>
