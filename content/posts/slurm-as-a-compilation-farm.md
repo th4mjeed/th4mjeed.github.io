@@ -46,9 +46,13 @@ The following are all on VMware ESXI
 
 Every instance has Rocky Linux 9.5 installed with SSH, root login and defined IP of all 4 nodes in the `/etc/hosts` file.
 
-<!---The Architecture diagram looks like this:
+The architecture diagram looks like this:
 
-{{< figure src="/assets/images/slurm-as-a-compilation-farm/SLUM_arch.drawio.png" alt="SLURM Architecture Diagram" >}}--->
+{{< figure
+    src="/images/slurm-as-a-compilation-farm/SLUM_arch.drawio.png"
+    alt="SLURM Architecture Diagram"
+    width="650"
+>}}
 
 ## **Chapter 1: The installation:**
 
