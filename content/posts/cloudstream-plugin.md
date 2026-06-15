@@ -26,6 +26,7 @@ Here's the Thamflix home screen running inside CloudStream:
     Thamflix home screen and movie details page.
   </figcaption>
 </figure>
+
 ---
 
 ## What is a CloudStream Plugin?
