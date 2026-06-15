@@ -68,7 +68,7 @@ params:
   profileMode:
     enabled: true
     title: Thamjeed  
-    subtitle: "Linux system administrator exploring Linux internals and kernel fundamentals."
+    subtitle: "Linux administrator exploring Linux internals and kernel fundamentals."
     imageUrl: "https://avatars.githubusercontent.com/u/78958596?v=4"
     imageTitle: Profile Image
     imageWidth: 120
