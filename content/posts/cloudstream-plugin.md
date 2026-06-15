@@ -1,11 +1,15 @@
 ---
 
-title: "Building a CloudStream Plugin from Scratch — How I Made Thamflix"
+title: "Building a CloudStream Plugin from Scratch - How I Made Thamflix"
 date: 2026-06-14
 draft: false
 ------------
 
-CloudStream is an open-source Android app for streaming movies and TV shows. What makes it powerful is its plugin system — anyone can write a provider that scrapes or queries any source and plug it directly into the app. This post walks through exactly how I built **Thamflix**, a plugin that uses the TMDB API for metadata and Vidlink for streaming.
+> Not my usual topic, but a fun project I wanted to share.
+
+---
+
+CloudStream is an open-source Android app for streaming movies and TV shows. What makes it powerful is its plugin system - anyone can write a provider that scrapes or queries any source and plug it directly into the app. This post walks through exactly how I built **Thamflix**, a plugin that uses the TMDB API for metadata and Vidlink for streaming.
 
 ---
 
