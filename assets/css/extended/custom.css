@@ -229,9 +229,28 @@ footer {
 .post-content .highlight {
     background: rgba(15, 17, 21, 0.65) !important;
     padding: 0.25rem;
+    position: relative;
+    overflow: hidden; /* clip scrollbars to the rounded corners */
 }
 .post-content .highlight pre {
     background: transparent !important;
+    padding: 1.4rem 1.6rem !important;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(122, 162, 247, 0.35) transparent;
+}
+.post-content .highlight pre::-webkit-scrollbar {
+    height: 6px;
+}
+.post-content .highlight pre::-webkit-scrollbar-track {
+    background: transparent;
+}
+.post-content .highlight pre::-webkit-scrollbar-thumb {
+    background: rgba(122, 162, 247, 0.35);
+    border-radius: 3px;
+}
+.post-content .highlight pre::-webkit-scrollbar-thumb:hover {
+    background: rgba(122, 162, 247, 0.55);
 }
 
 /* Prev/Next nav: slight hover lift like the post cards */
