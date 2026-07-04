@@ -182,3 +182,27 @@ blockquote {
     background: var(--accent);
     color: white;
 }
+
+/* ---------- Background Glow ---------- */
+html {
+    background-color: #101216;
+    background-image:
+        radial-gradient(120vw 90vh at 10% 15%,
+            rgba(122, 162, 247, 0.22) 0%,
+            rgba(122, 162, 247, 0.12) 30%,
+            rgba(122, 162, 247, 0.04) 55%,
+            transparent 75%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+body,
+.main,
+.profile-fill,
+header,
+footer {
+    background-color: transparent !important;
+}
+
+
+
