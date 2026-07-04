@@ -64,20 +64,30 @@ params:
   assets:
     customCSS:
       - css/extended/custom.css
+  label:
+     text: ""
+     icon: /images/logo.svg
+     iconHeight: 34
+
 
   profileMode:
     enabled: true
-    title: Thamjeed  
+    title: "Thamjeed"
     subtitle: "Linux Administrator • Linux Internals • Systems Programming"
     imageUrl: "/images/profile/avatar.png"
-    imageTitle: Profile Image
     imageWidth: 150
     imageHeight: 150
-   # buttons:
-   #   - name: Archives
-   #     url: archives
-   #   - name: Tags
-   #     url: tags
+
+#  homeInfoParams:
+#    Title: "'Sup? I'm Thamjeed 👋"
+#    Content: >
+#      I'm a Linux administrator who likes going past the "it works" layer —
+#      digging into how `/proc` actually represents a running process, how
+#      schedulers like IBM LSF dispatch jobs, or how systems programming
+#      concepts show up in everyday tools.
+#      <br><br>
+#      This is where I write about that stuff, along with the occasional
+#      side project that has nothing to do with Linux at all.
 
   socialIcons:
     - name: github

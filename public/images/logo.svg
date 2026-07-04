@@ -1,0 +1,7 @@
+<svg width="220" height="40" viewBox="0 0 220 40" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="4" width="32" height="32" rx="8" fill="#242830" stroke="#353b46" stroke-width="1"/>
+  <path d="M9 14 L16 20 L9 26" fill="none" stroke="#7aa2f7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="19" y="24" width="7" height="2.4" rx="1.2" fill="#7aa2f7"/>
+
+  <text x="42" y="27" font-family="'Space Grotesk', 'Inter', sans-serif" font-weight="700" font-size="20" letter-spacing="-0.3" fill="#eceff4">th<tspan fill="#7aa2f7">4</tspan>mjeed</text>
+</svg>
