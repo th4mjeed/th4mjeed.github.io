@@ -128,14 +128,17 @@ a:hover {
 /* ---------- Post Cards ---------- */
 
 .post-entry {
+    background: rgba(36, 40, 48, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 14px;
-    transition: transform .18s ease;
+    transition: transform .18s ease, border-color .18s ease;
 }
-
 .post-entry:hover {
     transform: translateY(-2px);
+    border-color: rgba(122, 162, 247, 0.25);
 }
-
 /* ---------- Code ---------- */
 
 .highlight {
@@ -205,4 +208,41 @@ footer {
 }
 
 
+/* ---------- Glass Surfaces (Post Page) ---------- */
+.toc,
+.post-content .highlight,
+.paginav,
+.share-buttons {
+    background: rgba(36, 40, 48, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+}
 
+/* TOC-specific: tighten spacing so it doesn't look too airy on glass */
+.toc {
+    padding: 1rem 1.5rem;
+}
+
+/* Code blocks: darker tint so syntax colors stay readable over the glow */
+.post-content .highlight {
+    background: rgba(15, 17, 21, 0.65) !important;
+    padding: 0.25rem;
+}
+.post-content .highlight pre {
+    background: transparent !important;
+}
+
+/* Prev/Next nav: slight hover lift like the post cards */
+.paginav a {
+    transition: background-color .18s ease;
+}
+.paginav a:hover {
+    background: rgba(122, 162, 247, 0.08);
+}
+
+/* Share icons row: match glass, keep the colored brand icons as-is */
+.share-buttons {
+    padding: 0.75rem 1rem;
+}
