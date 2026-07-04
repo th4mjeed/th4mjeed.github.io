@@ -16,19 +16,32 @@ CloudStream is an open-source Android app for streaming movies and TV shows. Wha
 ## What the Plugin Looks Like
 
 Here's the Thamflix home screen running inside CloudStream:
-
 <figure>
-  <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-    <img src="/images/cloudstream-plugin/ThamFlix-home.jpg"
-         alt="Thamflix Home Screen"
-         width="350" />
-    <img src="/images/cloudstream-plugin/ThamFlix-home2.jpg"
-         alt="Thamflix Movie Details"
-         width="350" />
-  </div>
-  <figcaption style="text-align: center; margin-top: 10px;">
-    Thamflix home screen and movie details page.
-  </figcaption>
+
+<table style="margin:auto; border:none;">
+<tr>
+
+<td style="padding:0 10px; border:none;">
+<img
+src="/images/cloudstream-plugin/ThamFlix-home.jpg"
+alt="Home"
+style="width:350px; max-width:100%; border-radius:12px;">
+</td>
+
+<td style="padding:0 10px; border:none;">
+<img
+src="/images/cloudstream-plugin/ThamFlix-home2.jpg"
+alt="Details"
+style="width:350px; max-width:100%; border-radius:12px;">
+</td>
+
+</tr>
+</table>
+
+<figcaption style="margin-top:12px; text-align:center;">
+ThamFlix home screen and movie details page.
+</figcaption>
+
 </figure>
 
 ---
