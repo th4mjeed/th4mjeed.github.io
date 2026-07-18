@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on th4mjeed</title>
-    <link>http://localhost:1313/posts/</link>
+    <link>http://localhost:35737/posts/</link>
     <description>Recent content in Posts on th4mjeed</description>
     <generator>Hugo -- 0.162.1</generator>
     <language>en</language>
     <copyright>Thamjeed</copyright>
     <lastBuildDate>Sat, 18 Jul 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:35737/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Android APK Reverse Engineering</title>
-      <link>http://localhost:1313/posts/apk_reverse_engineering/</link>
+      <link>http://localhost:35737/posts/apk_reverse_engineering/</link>
       <pubDate>Sat, 18 Jul 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/apk_reverse_engineering/</guid>
+      <guid>http://localhost:35737/posts/apk_reverse_engineering/</guid>
       <description>&lt;hr&gt;
 &lt;h4 id=&#34;target-mobiflix-android-app-commobiflixmobile&#34;&gt;Target: Mobiflix Android App (&lt;code&gt;com.mobiflix.mobile&lt;/code&gt;)&lt;/h4&gt;
 &lt;p&gt;&lt;strong&gt;Date:&lt;/strong&gt; July 18, 2026&lt;br&gt;
@@ -34,18 +34,18 @@
     </item>
     <item>
       <title>Exploring /proc: Understanding the Linux Process Filesystem</title>
-      <link>http://localhost:1313/posts/exploring-proc-filesystem/</link>
+      <link>http://localhost:35737/posts/exploring-proc-filesystem/</link>
       <pubDate>Mon, 15 Jun 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/exploring-proc-filesystem/</guid>
+      <guid>http://localhost:35737/posts/exploring-proc-filesystem/</guid>
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;hr&gt;</description>
     </item>
     <item>
       <title>Building a CloudStream Plugin from Scratch - How I Made Thamflix</title>
-      <link>http://localhost:1313/posts/cloudstream-plugin/</link>
+      <link>http://localhost:35737/posts/cloudstream-plugin/</link>
       <pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/cloudstream-plugin/</guid>
+      <guid>http://localhost:35737/posts/cloudstream-plugin/</guid>
       <description>&lt;hr&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Not my usual topic, but a fun project I wanted to share.&lt;/p&gt;
@@ -55,9 +55,9 @@
     </item>
     <item>
       <title>Setting up the Community Edition of IBM LSF (Load Sharing Facility)</title>
-      <link>http://localhost:1313/posts/setting-up-community-edition-lsf/</link>
+      <link>http://localhost:35737/posts/setting-up-community-edition-lsf/</link>
       <pubDate>Wed, 24 Dec 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/setting-up-community-edition-lsf/</guid>
+      <guid>http://localhost:35737/posts/setting-up-community-edition-lsf/</guid>
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;I wanted to understand how LSF actually works, not just at a surface “submit job, job runs” level, but the &lt;em&gt;real&lt;/em&gt; mechanics. Most places that use LSF don’t document it well, and when they do, it’s written assuming you already run a production cluster.&lt;/p&gt;
@@ -65,9 +65,9 @@
     </item>
     <item>
       <title>Setting Up Samba as an Active Directory Domain Controller on Linux</title>
-      <link>http://localhost:1313/posts/setting-up-samba-ad/</link>
+      <link>http://localhost:35737/posts/setting-up-samba-ad/</link>
       <pubDate>Fri, 21 Nov 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/setting-up-samba-ad/</guid>
+      <guid>http://localhost:35737/posts/setting-up-samba-ad/</guid>
       <description>&lt;hr&gt;
 &lt;p&gt;In this guide, we walk through the process of setting up a Samba Active Directory Domain Controller. The goal is to create a fully functional AD environment with the ability to join Windows and Linux clients to the domain.&lt;/p&gt;
 &lt;p&gt;This setup mirrors how Microsoft Active Directory works, but fully powered by open‑source software.&lt;/p&gt;
@@ -78,9 +78,9 @@
     </item>
     <item>
       <title>SLURM as a Compilation Farm</title>
-      <link>http://localhost:1313/posts/slurm-as-a-compilation-farm/</link>
+      <link>http://localhost:35737/posts/slurm-as-a-compilation-farm/</link>
       <pubDate>Wed, 19 Nov 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/slurm-as-a-compilation-farm/</guid>
+      <guid>http://localhost:35737/posts/slurm-as-a-compilation-farm/</guid>
       <description>&lt;hr&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; 📢 This document is based on my understanding of SLURM and is in no way a detailed guide covering every single topic. Take this as a practical guide from a noob’s perspective diving into it.&lt;/p&gt;
