@@ -4,11 +4,34 @@
     <title>Posts on th4mjeed</title>
     <link>http://localhost:1313/posts/</link>
     <description>Recent content in Posts on th4mjeed</description>
-    <generator>Hugo -- 0.152.2</generator>
+    <generator>Hugo -- 0.162.1</generator>
     <language>en</language>
     <copyright>Thamjeed</copyright>
-    <lastBuildDate>Mon, 15 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 18 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Android APK Reverse Engineering</title>
+      <link>http://localhost:1313/posts/apk_reverse_engineering/</link>
+      <pubDate>Sat, 18 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/apk_reverse_engineering/</guid>
+      <description>&lt;hr&gt;
+&lt;h4 id=&#34;target-mobiflix-android-app-commobiflixmobile&#34;&gt;Target: Mobiflix Android App (&lt;code&gt;com.mobiflix.mobile&lt;/code&gt;)&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;Date:&lt;/strong&gt; July 18, 2026&lt;br&gt;
+&lt;strong&gt;Researcher:&lt;/strong&gt; thamjeed&lt;br&gt;
+&lt;strong&gt;Environment:&lt;/strong&gt; Fedora WSL2 on Windows 11, Physical Android device (Xiaomi POCO, Android 13, arm64)&lt;br&gt;
+&lt;strong&gt;Scope:&lt;/strong&gt; Educational — understanding mobile app architecture, API design, native library obfuscation, and dynamic instrumentation techniques.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;
+&lt;p&gt;This document is a complete, step-by-step writeup of reverse engineering an Android streaming application from scratch. The goal was to understand:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Where the app fetches its content from&lt;/li&gt;
+&lt;li&gt;How the app protects its API endpoints&lt;/li&gt;
+&lt;li&gt;What encryption scheme is used to hide configuration&lt;/li&gt;
+&lt;li&gt;How certificate pinning is implemented and bypassed&lt;/li&gt;
+&lt;li&gt;The full API surface area of the backend&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The process combined static analysis (decompiling the APK and reading Java/smali code) with dynamic analysis (Frida instrumentation, mitmproxy traffic interception).&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Exploring /proc: Understanding the Linux Process Filesystem</title>
       <link>http://localhost:1313/posts/exploring-proc-filesystem/</link>

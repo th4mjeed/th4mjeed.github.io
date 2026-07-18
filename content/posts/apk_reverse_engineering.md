@@ -3,7 +3,8 @@ title: "Android APK Reverse Engineering"
 date: 2026-07-18
 draft: false
 ---
-## Target: Mobiflix Android App (`com.mobiflix.mobile`)
+---
+#### Target: Mobiflix Android App (`com.mobiflix.mobile`)
 
 **Date:** July 18, 2026  
 **Researcher:** thamjeed  
